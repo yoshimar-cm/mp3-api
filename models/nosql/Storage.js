@@ -5,7 +5,7 @@ const StorageSchema = new Schema({
             type: String
         },
         filename:{
-            type: Number
+            type: String
         }
     },{
         timestamps: true,
