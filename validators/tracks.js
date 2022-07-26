@@ -1,5 +1,7 @@
 const {check} = require('express-validator');
+
 const validateResults = require('../utils/handleValidator');
+const {TrackModel} = require('../models');
 
 const validatorCreateItem = [
     check("name").exists().notEmpty(),
@@ -16,6 +18,20 @@ const validatorCreateItem = [
     (req, res, next)=> validateResults(req,res,next),
 ];
 
+
+const validatorDeleteItem = [
+    check('id','Id invalid').isMongoId(),
+    check('id').custom(async (id ='')=>{
+        const item = await TrackModel.findById(id);
+        // console.log(id);
+        if(!item){
+            throw new error(`El id no existe registrado`);
+        }
+    }),
+    (req, res, next)=> validateResults(req,res,next),
+];
+
 module.exports = {
-    validatorCreateItem
+    validatorCreateItem,
+    validatorDeleteItem
 }
