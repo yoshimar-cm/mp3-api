@@ -18,6 +18,11 @@ const validatorCreateItem = [
     (req, res, next)=> validateResults(req,res,next),
 ];
 
+const validatorGetOnlyItem = [
+    check('id','Id invalid').exists().notEmpty().isMongoId(),
+    (req, res, next)=> validateResults(req,res,next),
+];
+
 
 const validatorDeleteItem = [
     check('id','Id invalid').isMongoId(),
@@ -33,5 +38,6 @@ const validatorDeleteItem = [
 
 module.exports = {
     validatorCreateItem,
+    validatorGetOnlyItem,
     validatorDeleteItem
 }

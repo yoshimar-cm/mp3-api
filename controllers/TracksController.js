@@ -26,8 +26,9 @@ const getItems = async (req, res, next) =>{
  */
 const getItem = async (req, res, next) =>{
     try {
-        const id = req.params;
-        const data = await TrackModel.findOne(id);
+        const {id} = matchedData(req);
+
+        const data = await TrackModel.findOne({_id:id});
         res.send(data);
     } catch (error) {
         handleHttpError(res, 'Error get items'); 
@@ -59,9 +60,13 @@ const postItem = async (req, res, next) =>{
  * @param {*} res 
  * @param {*} next 
  */
-const putItem = (req, res, next) =>{
+const putItem = async (req, res, next) =>{
     try {
+        const {id, ...body} = matchedData(req);
         // code
+        console.log(id)
+        const data = await TrackModel.findOneAndUpdate(id,body);
+        res.status(201).json(data);
     } catch (error) {
         handleHttpError(res, 'Error updated items'); 
     }
@@ -78,7 +83,7 @@ const deleteItem = async (req, res, next) =>{
     try {
         const {id} = matchedData(req);
 
-        const data = await TrackModel.deleteOne({_id:id});
+        const data = await TrackModel.delete({_id:id});
         res.status(200).json({data});
     } catch (error) {
         handleHttpError(res, 'Error deleted items'); 
